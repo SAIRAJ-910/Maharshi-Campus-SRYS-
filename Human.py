@@ -11,28 +11,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 
-# -----------------------------
-# 1. LOAD MODEL
-# -----------------------------
 weights = FasterRCNN_ResNet50_FPN_Weights.DEFAULT
 model = fasterrcnn_resnet50_fpn(weights=weights)
 model.eval()
 
-# -----------------------------
-# 2. IMAGE PATH (CHANGE THIS)
-# -----------------------------
-image_path = "C:/Users/WELCOME/Desktop/INoVation/SREYAS Project3/people.webp"   # image must be in same folder
+image_path = "C:/Users/WELCOME/Desktop/INoVation/SREYAS Project3/people.webp"  
 
-# -----------------------------
-# 3. LOAD & PREPROCESS IMAGE 
-# -----------------------------
 image = Image.open(image_path).convert("RGB")
 transform = transforms.ToTensor()
 img_tensor = transform(image).unsqueeze(0)
 
-# -----------------------------
-# 4. RUN DETECTION
-# -----------------------------
 with torch.no_grad():
     predictions = model(img_tensor)
 
@@ -40,9 +28,6 @@ boxes = predictions[0]['boxes']
 labels = predictions[0]['labels']
 scores = predictions[0]['scores']
 
-# -----------------------------
-# 5. FILTER HUMANS (class = 1)
-# -----------------------------
 threshold = 0.5
 human_boxes = []
 human_scores = []
@@ -54,9 +39,6 @@ for box, label, score in zip(boxes, labels, scores):
 
 human_count = len(human_boxes)
 
-# -----------------------------
-# 6. DRAW BOUNDING BOXES
-# -----------------------------
 img_np = np.array(image)
 
 for box, score in zip(human_boxes, human_scores):
@@ -72,9 +54,6 @@ for box, score in zip(human_boxes, human_scores):
         2
     )
 
-# -----------------------------
-# 7. DISPLAY RESULT
-# -----------------------------
 plt.figure(figsize=(12, 6))
 
 plt.subplot(1, 2, 1)
@@ -90,4 +69,5 @@ plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-print(f"✅ Faster R-CNN detected {human_count} humans")
+print(f"Faster R-CNN detected {human_count} humans")
+
