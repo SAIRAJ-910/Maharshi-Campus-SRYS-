@@ -10,7 +10,6 @@ import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
 
-# Full COCO classes (complete list needed)
 COCO_CLASSES = [
     '__background__', 'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus',
     'train', 'truck', 'boat', 'traffic light', 'fire hydrant', 'N/A', 'stop sign',
@@ -48,7 +47,7 @@ def show_results(image_path, results, threshold=0.5):
     boxes, scores, labels = boxes[mask], scores[mask], labels[mask]
 
     for box, score, label in zip(boxes, scores, labels):
-        box = box.cpu().numpy()  # ✅ FIXED: No [0] indexing
+        box = box.cpu().numpy()  
         x1, y1, x2, y2 = map(int, box)
         class_name = COCO_CLASSES[int(label)]
         cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -60,11 +59,10 @@ def show_results(image_path, results, threshold=0.5):
     plt.axis('off')
     plt.show()
 
-# ✅ FIXED: Same image path for both!
+
 results = faster_rcnn_inference("C:/Users/WELCOME/Desktop/INoVation/SREYAS Project3/cat.jpg")
 show_results("C:/Users/WELCOME/Desktop/INoVation/SREYAS Project3/cat.jpg", results)
 
-# ✅ FIXED Video loop
 cap = cv2.VideoCapture("video.mp4")
 while cap.isOpened():
     ret, frame = cap.read()
@@ -79,9 +77,9 @@ while cap.isOpened():
 
     boxes, scores, labels = predictions[0]['boxes'], predictions[0]['scores'], predictions[0]['labels']
 
-    for box, score, label in zip(boxes, scores, labels):  # ✅ All detections
+    for box, score, label in zip(boxes, scores, labels):  
         if score > 0.5:
-            box = box.cpu().numpy()  # ✅ FIXED: Process ALL boxes
+            box = box.cpu().numpy() 
             x1, y1, x2, y2 = map(int, box)
             class_name = COCO_CLASSES[int(label)]
             cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -93,3 +91,4 @@ while cap.isOpened():
 
 cap.release()
 cv2.destroyAllWindows()
+
